@@ -21,8 +21,9 @@ public class BudgetCompteComptableServiceImpl implements BudgetCompteComptableSe
 	}
 
 	@Override
-	public BudgetCompteComptable save(BudgetCompteComptable budget) {
-		return budgetCompteComptableRepository.save(budget);
+	public int save(BudgetCompteComptable budget) {
+		budgetCompteComptableRepository.save(budget);
+		return 1;
 	}
 
 	@Override

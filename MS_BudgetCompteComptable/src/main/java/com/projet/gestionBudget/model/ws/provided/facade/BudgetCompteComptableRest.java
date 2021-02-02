@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.projet.gestionBudget.bean.BudgetCompteComptable;
 import com.projet.gestionBudget.model.service.facade.BudgetCompteComptableService;
+import com.projet.gestionBudget.model.ws.provided.converter.BudgetCompteComptableConverter;
+import com.projet.gestionBudget.model.ws.provided.vo.BudgetCompteComptableVo;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,28 +26,34 @@ public class BudgetCompteComptableRest {
 	@Autowired
 	private BudgetCompteComptableService budgetCompteComptableService;
 	
+	@Autowired
+	private BudgetCompteComptableConverter budgetCompteComptableConverter;
+	
 	@GetMapping("/Montant/{montant}")
 	@ApiOperation("Cette methode permet de trouver l'ensemble des BudgetCompteComptables par montant")
-	public List<BudgetCompteComptable> findByMontant(@PathVariable int montant) {
-		return budgetCompteComptableService.findByMontant(montant);
+	public List<BudgetCompteComptableVo> findByMontant(@PathVariable int montant) {
+		List<BudgetCompteComptable> budgetCompteComptables = budgetCompteComptableService.findByMontant(montant);
+		return budgetCompteComptableConverter.toVos(budgetCompteComptables);
 	}
 	
 	@PostMapping("/")
 	@ApiOperation("Cette methode permet d'inserer un nouveau BudgetCompteComptable")
-	public BudgetCompteComptable save(@RequestBody BudgetCompteComptable budget) {
-		return budgetCompteComptableService.save(budget);
+	public int save(@RequestBody BudgetCompteComptableVo budgetCompteComptableVo) {
+		return budgetCompteComptableService.save(budgetCompteComptableConverter.toBean(budgetCompteComptableVo));
 	}
 	
 	@GetMapping("/")
 	@ApiOperation("Cette methode permet d'afficher l'enssemble des BudgetCompteComptables")
-	public List<BudgetCompteComptable> findAll() {
-		return budgetCompteComptableService.findAll();
+	public List<BudgetCompteComptableVo> findAll() {
+		List<BudgetCompteComptable> budgetCompteComptables = budgetCompteComptableService.findAll();
+		return budgetCompteComptableConverter.toVos(budgetCompteComptables);
 	}
 	
 	@GetMapping("/id/{id}")
-	@ApiOperation("Cette methode permet de trouver l'ensemble des BudgetCompteComptables par id")
-	public BudgetCompteComptable findById(@PathVariable Long id) {
-		return budgetCompteComptableService.findById(id);
+	@ApiOperation("Cette methode permet de trouver un BudgetCompteComptables par id")
+	public BudgetCompteComptableVo findById(@PathVariable Long id) {
+		BudgetCompteComptable budgetCompteComptable = budgetCompteComptableService.findById(id);
+		return budgetCompteComptableConverter.toVo(budgetCompteComptable);
 	}
 	
 	@DeleteMapping("/{id}")

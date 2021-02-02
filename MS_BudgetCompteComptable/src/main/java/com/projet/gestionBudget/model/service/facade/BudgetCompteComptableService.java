@@ -8,7 +8,7 @@ import com.projet.gestionBudget.bean.BudgetCompteComptable;
 public interface BudgetCompteComptableService {
 	public List<BudgetCompteComptable> findByMontant(int montant);
 	
-	public BudgetCompteComptable save(BudgetCompteComptable budget);
+	public int save(BudgetCompteComptable budget);
 	
 	public List<BudgetCompteComptable> findAll();
 	
