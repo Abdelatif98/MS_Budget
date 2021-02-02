@@ -12,6 +12,7 @@ import com.projet.gestionBudget.bean.Budget;
 import com.projet.gestionBudget.model.service.facade.BudgetService;
 import com.projet.gestionBudget.model.ws.provided.converter.BudgetConverter;
 import com.projet.gestionBudget.model.ws.provided.vo.BudgetVo;
+import com.projet.gestionBudget.model.ws.required.vo.BudgetDepartementVo;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -124,11 +125,11 @@ public class BudgetRest {
 		return false;
 	}
 	
-	@ApiOperation("cette methode permet de modifier un budget")
+	/*@ApiOperation("cette methode permet de modifier un budget")
 	@RequestMapping(value = "/budgets/annee/{annee}",method = RequestMethod.PUT)
 	public int saveBudget(@RequestBody BudgetVo budgetVo) {
 		Budget budget = budgetConverter.toBean(budgetVo);
 		return budgetService.saveBudget(budget);
-	}
+	}*/
 	
 }

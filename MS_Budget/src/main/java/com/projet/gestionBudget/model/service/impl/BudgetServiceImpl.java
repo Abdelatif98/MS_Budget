@@ -1,30 +1,48 @@
 package com.projet.gestionBudget.model.service.impl;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.projet.gestionBudget.bean.Budget;
 import com.projet.gestionBudget.model.dao.BudgetRepository;
 import com.projet.gestionBudget.model.service.facade.BudgetService;
-
-
+import com.projet.gestionBudget.model.ws.required.facade.BudgetDepartementRequiredRest;
+import com.projet.gestionBudget.model.ws.required.facade.DepartementRequiredRest;
 
 @Service
 public class BudgetServiceImpl implements BudgetService{
 	@Autowired
 	private BudgetRepository budgetRepository;
 	
+	@Autowired
+	private BudgetDepartementRequiredRest budgetDepartementRequiredRest;
+	
+	@Autowired
+	private DepartementRequiredRest departementRequiredRest;
+	
 	@Override
 	public Budget findByAnnee(int annee) {
 		return budgetRepository.findByAnnee(annee);
 	}
 	
-	/*@Override
-	public Budget findByAnneeAndBudgetDepartementDepartementLibelle(int annee,String libelle) {
-		return budgetRepository.findByAnneeAndBudgetDepartementDepartementLibelle(annee,libelle);
-	}*/
+	@Override
+	public Budget findByRefBudget(String ref) {
+		return budgetRepository.findByRefBudget(ref);
+	}
+	
+
+	public boolean testByAnneeAndBudgetDepartementDepartementLibelle(int annee,String libelle) {
+		boolean test = false;
+		Budget budget = budgetRepository.findByAnnee(annee);
+		String ref = departementRequiredRest.findByLibelle(libelle).getReference();
+		for(int i=0; i<budgetDepartementRequiredRest.findByRefDepartement(ref).size(); i++) {
+			if(budgetDepartementRequiredRest.findByRefDepartement(ref).get(i).getRefBudget().equals(budget.getRefBudget())) {
+				test = true;
+			}
+		}
+		return test;
+	}
 		
 	@Override
 	public List<Budget> recupererByMontantInvestisementInf(double montant) {
@@ -100,35 +118,19 @@ public class BudgetServiceImpl implements BudgetService{
 
 	@Override
 	public int save(Budget budget) {
-		return 0;
-		/*Budget loadedBudget1 = findByAnnee((budget.getAnnee()));
-		double montantF= 0;
-		double montantI= 0;
-		if(loadedBudget1 != null) {
+		Budget loadedBudget = findByAnnee((budget.getAnnee()));
+		if(loadedBudget != null) {
 			return -1;
 		}
 		else {
-			budgetRepository.save(budget);
-			Budget loadedBudget2 = findByAnnee((budget.getAnnee()));
-			//save la liste des budgetDepartement pour mon budget (essayer d'app la meth d'Ayyoub)
-			logger(budget.getBudgetDepartement().size());
-			for(int i=0; i< budget.getBudgetDepartement().size();i++) {
-				budget.getBudgetDepartement().get(i).setBudget(loadedBudget2);
-				budgetDepartementServiceImpl.save(budget.getBudgetDepartement().get(i));
-				montantF += budget.getBudgetDepartement().get(i).getMontantFonctionement();
-				montantI += budget.getBudgetDepartement().get(i).getMontantInvestisement();
-			}
-			budget.setMontantFonctionement(montantF);
-			budget.setMontantInvestisement(montantI);
 			budget.setMontantTotal(budget.getMontantFonctionement()+budget.getMontantInvestisement());
-			return 0;
-		}*/
+			budgetRepository.save(budget);
+			return 1;
+		}
 	}
 	
-	@Override
+	/*@Override
 	public int saveBudget(Budget budget) {
-		return 0;
-		/*
 		Budget loadedBudget = findByAnnee(budget.getAnnee());
 		double montantI=0;
 		double montantF=0;
@@ -140,13 +142,9 @@ public class BudgetServiceImpl implements BudgetService{
 		if(loadedBudget == null) {
 			return -1;
 		}
-		else if(montantI > loadedBudget.getMontantInvestisement() || montantF > loadedBudget.getMontantFonctionement()){
-			return -2;
-		}
 		else {
-			for(int i=0;i < budget.getBudgetDepartement().size();i++) {
-				Budget loadedBudget2 = this.findByAnneeAndBudgetDepartementDepartementLibelle(budget.getAnnee(), budget.getBudgetDepartement().get(i).getDepartement().getLibelle());
-				if(loadedBudget2 == null) {
+			for(int i=0;i < budgetDepartementRequiredRest.findByRefBudget(budget.getRefBudget()).size();i++) { // besoin de la liste a inserer
+				if(this.testByAnneeAndBudgetDepartementDepartementLibelle(budget.getAnnee(),budgetDepartementRequiredRest.findByRefBudget(budget.getRefBudget()).get(i).get) == true) {
 					//update
 				}
 				else {
@@ -155,8 +153,8 @@ public class BudgetServiceImpl implements BudgetService{
 			}
 			this.save(budget); // on va faire update
 			return 0;
-		}*/
-	}
+		}
+	}*/
 	
 	@Override
 	public List<Budget> findAll() {
@@ -173,16 +171,14 @@ public class BudgetServiceImpl implements BudgetService{
     @Transactional
 	@Override
 	public boolean deleteById(Long id) {
-		return false;
-    	/*
     	if(this.budgetRepository.findById(id).isPresent()) {
     		Budget budget = this.budgetRepository.findById(id).get();
-    		this.budgetDepartementRepository.deleteByBudget(budget);
+    		budgetDepartementRequiredRest.deleteByRefBudget(budget.getRefBudget());
     		budgetRepository.deleteById(id);
     		return true;
     	}
     	return false;
-    	*/
+    	
 	}
 	
 }

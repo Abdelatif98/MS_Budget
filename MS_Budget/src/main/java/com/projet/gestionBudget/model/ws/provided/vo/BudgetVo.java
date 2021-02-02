@@ -12,6 +12,7 @@ public class BudgetVo {
 	private String montantInvestisementRestant;
 	private String montantFonctionementRestant;
 	private String montantTotal;
+
 	public Long getId() {
 		return id;
 	}

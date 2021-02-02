@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.projet.gestionBudget.bean.Budget;
+import com.projet.gestionBudget.model.ws.required.vo.BudgetDepartementVo;
 
 @Service
 public interface BudgetService {
@@ -36,9 +37,11 @@ public interface BudgetService {
 	
 	public Budget findById(Long id);
 	
+	public Budget findByRefBudget(String ref);
+	
 	@Transactional
 	public boolean  deleteById(Long id);
 
-	public int saveBudget(Budget budget);
+	//public int saveBudget(Budget budget);
 
 }

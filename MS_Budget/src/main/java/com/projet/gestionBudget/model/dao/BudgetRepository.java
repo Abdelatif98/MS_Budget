@@ -15,6 +15,8 @@ public interface BudgetRepository extends JpaRepository<Budget,Long>{
 	
 	public Budget findByAnnee(int annee);
 	
+	public Budget findByRefBudget(String ref);
+	
 	//public Budget findByAnneeAndBudgetDepartementDepartementLibelle(int annee,String libelle);
 	
 	@Query("SELECT t FROM Budget t WHERE t.montantInvestisement <= :montant") //on interoge avec Bean
