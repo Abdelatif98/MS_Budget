@@ -14,10 +14,13 @@ import com.projet.gestionBudget.model.service.facade.DepartementService;
 public class DepartementServiceImpl implements DepartementService {
 	@Autowired
 	DepartementRepository departementRep;
-	public Departement findByLibelle(String Libelle) {
-		return departementRep.findByLibelle(Libelle);
+	public Departement findByLibelle(String libelle) {
+		return departementRep.findByLibelle(libelle);
 	}
 
+	public Departement findByRefDepartement(String refDepartement) {
+		return departementRep.findByLibelle(refDepartement);
+	}
 	
 public  int  save(Departement dep) {
 	Departement loaddep=findByLibelle(dep.getLibelle());

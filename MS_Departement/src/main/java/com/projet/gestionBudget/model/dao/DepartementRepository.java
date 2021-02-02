@@ -9,5 +9,6 @@ import com.projet.gestionBudget.bean.Departement;
 public interface DepartementRepository extends JpaRepository<Departement,Long> {
 	 public Departement findByid(Long id);
 	 public Departement findByLibelle(String libelle);
-	 	 
+	 public Departement findByRefDepartement(String refDepartement);
+	
 }

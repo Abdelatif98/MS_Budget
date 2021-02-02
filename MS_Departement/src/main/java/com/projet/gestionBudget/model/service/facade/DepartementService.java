@@ -8,5 +8,6 @@ public interface DepartementService {
 	public List<Departement> findAll();
 	int save(Departement departement);
 	public int deleteById(Long id);
-	public Departement findByLibelle(String Libelle);
+	public Departement findByLibelle(String libelle);
+	public Departement findByRefDepartement(String refDepartement);
 }
